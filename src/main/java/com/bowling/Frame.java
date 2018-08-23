@@ -3,29 +3,31 @@ package com.bowling;
 public class Frame {
     private final Type type;
     private int points = -1;
-    private int hit1 = -1;
-    private int hit2 = -1;
+    private int roll1 = 0;
+    private int roll2 = 0;
 
     public Frame(String frame) {
         this.type = Type.getType(frame);
         switch (this.type) {
             case STRIKE:
+                this.roll1 = 10;
                 break;
             case SPARE:
-                this.hit1 = parsePointsFromHit(frame.substring(0, 1));
+                this.roll1 = parsePointsFromRoll(frame.substring(0, 1));
+                this.roll2 = 10 - this.roll1;
                 break;
             case NORMAL:
-                this.hit1 = parsePointsFromHit(frame.substring(0, 1));
-                this.hit2 = parsePointsFromHit(frame.substring(1));
+                this.roll1 = parsePointsFromRoll(frame.substring(0, 1));
+                if (frame.length() > 1) this.roll2 = parsePointsFromRoll(frame.substring(1));
                 break;
         }
     }
 
-    private int parsePointsFromHit(String hit) {
-        if ("-".equals(hit)) {
+    private int parsePointsFromRoll(String roll) {
+        if ("-".equals(roll)) {
             return 0;
         } else {
-            return Integer.valueOf(hit);
+            return Integer.valueOf(roll);
         }
     }
 
@@ -43,18 +45,18 @@ public class Frame {
                 this.points = 10;
                 break;
             case NORMAL:
-                this.points = this.hit1 + this.hit2;
+                this.points = this.roll1 + this.roll2;
                 break;
         }
         return points;
     }
 
-    public int getFirstHitPoints() {
-        return this.hit1;
+    public int getFirstRoll() {
+        return this.roll1;
     }
 
-    public int getSecondHitPoints() {
-        return this.hit2;
+    public int getSecondRoll() {
+        return this.roll2;
     }
 
     public enum Type {

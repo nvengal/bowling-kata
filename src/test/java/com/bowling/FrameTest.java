@@ -61,7 +61,7 @@ public class FrameTest {
 
     @Test
     public void testNormalFrameWithNoMissesDetection() {
-        int hit1 = ThreadLocalRandom.current().nextInt(1, 10);
+        int hit1 = ThreadLocalRandom.current().nextInt(1, 9);
         int hit2 = ThreadLocalRandom.current().nextInt(1, 10-hit1);
         String input = String.format("%d%d", hit1, hit2);
         Frame normal = new Frame(input);
@@ -95,7 +95,7 @@ public class FrameTest {
 
     @Test
     public void testNormalFramePointsWithNoMisses() {
-        int hit1 = ThreadLocalRandom.current().nextInt(1, 10);
+        int hit1 = ThreadLocalRandom.current().nextInt(1, 9);
         int hit2 = ThreadLocalRandom.current().nextInt(1, 10-hit1);
         String input = String.format("%d%d", hit1, hit2);
         Frame normal = new Frame(input);
@@ -128,6 +128,12 @@ public class FrameTest {
     }
 
     @Test
+    public void testGetFirstHitForStrike() {
+        Frame strike = new Frame("x");
+        assertEquals("Strike first hit not calculated properly", 10, strike.getFirstRoll());
+    }
+
+    @Test
     public void testGetFirstHitWithNoMiss() {
         int hit1 = ThreadLocalRandom.current().nextInt(1, 10);
         int hit2 = ThreadLocalRandom.current().nextInt(1, 10-hit1);
@@ -135,7 +141,7 @@ public class FrameTest {
         Frame normal = new Frame(input);
         String errorMessage = String.format(
                 "Normal frame with no misses ('%s') first hit not parsed correctly", input);
-        assertEquals(errorMessage, hit1, normal.getFirstHitPoints());
+        assertEquals(errorMessage, hit1, normal.getFirstRoll());
     }
 
     @Test
@@ -145,17 +151,17 @@ public class FrameTest {
         Frame normal = new Frame(input);
         String errorMessage = String.format(
                 "Normal frame with one miss ('%s') first hit not parsed correctly", input);
-        assertEquals(errorMessage, hit, normal.getFirstHitPoints());
+        assertEquals(errorMessage, hit, normal.getFirstRoll());
     }
 
     @Test
-    public void testGetFirstHitWithStrike() {
+    public void testGetFirstHitWithSpare() {
         int hit = ThreadLocalRandom.current().nextInt(1, 10);
         String input = String.format("%d/", hit);
         Frame normal = new Frame(input);
         String errorMessage = String.format(
-                "Normal frame with strike ('%s') first hit not parsed correctly", input);
-        assertEquals(errorMessage, hit, normal.getFirstHitPoints());
+                "Normal frame with spare ('%s') first hit not parsed correctly", input);
+        assertEquals(errorMessage, hit, normal.getFirstRoll());
     }
 
     @Test
@@ -166,7 +172,7 @@ public class FrameTest {
         Frame normal = new Frame(input);
         String errorMessage = String.format(
                 "Normal frame with no misses ('%s') second hit not parsed correctly", input);
-        assertEquals(errorMessage, hit2, normal.getSecondHitPoints());
+        assertEquals(errorMessage, hit2, normal.getSecondRoll());
     }
 
     @Test
@@ -176,15 +182,25 @@ public class FrameTest {
         Frame normal = new Frame(input);
         String errorMessage = String.format(
                 "Normal frame with one miss ('%s') second hit not parsed correctly", input);
-        assertEquals(errorMessage, hit, normal.getSecondHitPoints());
+        assertEquals(errorMessage, hit, normal.getSecondRoll());
     }
 
     @Test
     public void testGetNormalFrameHitsWithTwoMisses() {
         Frame normal = new Frame("--");
         assertEquals("Normal frame with two misses ('--') first hit not parsed correctly",
-                0, normal.getFirstHitPoints());
+                0, normal.getFirstRoll());
         assertEquals("Normal frame with two misses ('--') second hit not parsed correctly",
-                0, normal.getSecondHitPoints());
+                0, normal.getSecondRoll());
+    }
+
+    @Test
+    public void testFrameInstantiationWithSingleBonusRoll() {
+        Frame bonus = new Frame("5");
+
+        assertEquals("Incorrect total points on frame with single bonus roll",
+                5, bonus.getPoints());
+        assertEquals("Incorrect first roll on bonus frame with single roll",
+                5, bonus.getFirstRoll());
     }
 }
