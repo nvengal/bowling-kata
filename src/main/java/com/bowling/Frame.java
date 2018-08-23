@@ -2,6 +2,7 @@ package com.bowling;
 
 public class Frame {
     private final Type type;
+    private int points;
 
     public Frame(String frame) {
         type = Type.getType(frame);
@@ -9,6 +10,10 @@ public class Frame {
 
     public Type getType() {
         return type;
+    }
+
+    public int getPoints() {
+        return points;
     }
 
     public enum Type {

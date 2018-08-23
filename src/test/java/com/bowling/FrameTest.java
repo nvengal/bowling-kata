@@ -15,59 +15,115 @@ public class FrameTest {
     }
 
     @Test
-    public void testLowerCaseSPAREDetection() {
+    public void testLowerCaseStrikeDetection() {
         Frame strike = new Frame("x");
         assertEquals("Lower Case 'x' not instantiated as strike",
                 Frame.Type.STRIKE, strike.getType());
     }
 
     @Test
-    public void testHitThenSPAREDetection() {
+    public void testStrikePoints() {
+        Frame strike = new Frame("x");
+        assertEquals("Strike points were not calculated properly", 10, strike.getPoints());
+    }
+
+    @Test
+    public void testHitThenSpareDetection() {
         int hit = ThreadLocalRandom.current().nextInt(1, 10);
         String input = String.format("%d/", hit);
         Frame spare = new Frame(input);
-        String errorMessage = String.format("SPARE after hit ('%s') not instantiated as spare", input);
+        String errorMessage = String.format("Spare after hit ('%s') not instantiated as spare", input);
         assertEquals(errorMessage, Frame.Type.SPARE, spare.getType());
     }
 
     @Test
-    public void testMissThenSPAREDetection() {
+    public void testSparePointsWithHit() {
+        int hit = ThreadLocalRandom.current().nextInt(1, 10);
+        String input = String.format("%d/", hit);
+        Frame spare = new Frame(input);
+        String errorMessage = String.format("Spare after hit ('%s') points not calculated properly", input);
+        assertEquals(errorMessage, 10, spare.getPoints());
+    }
+
+    @Test
+    public void testMissThenSpareDetection() {
         Frame spare = new Frame("-/");
-        assertEquals("SPARE after miss ('-/') not instantiated as spare",
+        assertEquals("Spare after miss ('-/') not instantiated as spare",
                 Frame.Type.SPARE, spare.getType());
     }
 
     @Test
-    public void testNORMALFrameWithNoMissesDetection() {
+    public void testSparePointsWithMiss() {
+        Frame spare = new Frame("-/");
+        assertEquals("Spare after miss ('-/') points not calculated properly",
+                10, spare.getPoints());
+    }
+
+    @Test
+    public void testNormalFrameWithNoMissesDetection() {
         int hit1 = ThreadLocalRandom.current().nextInt(1, 10);
         int hit2 = ThreadLocalRandom.current().nextInt(1, 10-hit1);
         String input = String.format("%d%d", hit1, hit2);
         Frame normal = new Frame(input);
         String errorMessage = String.format(
-                "NORMAL frame with no misses ('%s') not instantiated as normal", input);
+                "Normal frame with no misses ('%s') not instantiated as normal", input);
         assertEquals(errorMessage, Frame.Type.NORMAL, normal.getType());
     }
 
     @Test
-    public void testNORMALFrameWithOneMissDetection() {
-        int hit1 = ThreadLocalRandom.current().nextInt(1, 10);
-        String input = String.format("%d-", hit1);
+    public void testNormalFrameWithOneMissDetection() {
+        int hit = ThreadLocalRandom.current().nextInt(1, 10);
+        String input = String.format("%d-", hit);
         Frame normal = new Frame(input);
         String errorMessage = String.format(
-                "NORMAL frame with one miss after a hit ('%s') not instantiated as normal", input);
+                "Normal frame with one miss after a hit ('%s') not instantiated as normal", input);
         assertEquals(errorMessage, Frame.Type.NORMAL, normal.getType());
 
-        input = String.format("-%d", hit1);
+        input = String.format("-%d", hit);
         normal = new Frame(input);
         errorMessage = String.format(
-                "NORMAL frame with one miss before a hit ('%s') not instantiated as normal", input);
+                "Normal frame with one miss before a hit ('%s') not instantiated as normal", input);
         assertEquals(errorMessage, Frame.Type.NORMAL, normal.getType());
     }
 
     @Test
-    public void testNORMALFrameWithTwoMissesDetection() {
+    public void testNormalFrameWithTwoMissesDetection() {
         Frame normal = new Frame("--");
-        assertEquals("NORMAL frame with two misses ('--') not instantiated as normal",
+        assertEquals("Normal frame with two misses ('--') not instantiated as normal",
                 Frame.Type.NORMAL, normal.getType());
+    }
+
+    @Test
+    public void testNormalFramePointsWithNoMisses() {
+        int hit1 = ThreadLocalRandom.current().nextInt(1, 10);
+        int hit2 = ThreadLocalRandom.current().nextInt(1, 10-hit1);
+        String input = String.format("%d%d", hit1, hit2);
+        Frame normal = new Frame(input);
+        String errorMessage = String.format(
+                "Normal frame with no misses ('%s') not calculated properly", input);
+        assertEquals(errorMessage, hit1+hit2, normal.getPoints());
+    }
+
+    @Test
+    public void testNormalFramePointsWithOneMiss() {
+        int hit = ThreadLocalRandom.current().nextInt(1, 10);
+        String input = String.format("%d-", hit);
+        Frame normal = new Frame(input);
+        String errorMessage = String.format(
+                "Normal frame with one miss after a hit ('%s') not calculated properly", input);
+        assertEquals(errorMessage, hit, normal.getPoints());
+
+        input = String.format("-%d", hit);
+        normal = new Frame(input);
+        errorMessage = String.format(
+                "Normal frame with one miss before a hit ('%s') not calculated properly", input);
+        assertEquals(errorMessage, hit, normal.getPoints());
+    }
+
+    @Test
+    public void testNormalFramePointsWithTwoMisses() {
+        Frame normal = new Frame("--");
+        assertEquals("Normal frame with two misses ('--') not calculated properly",
+                0, normal.getPoints());
     }
 }
