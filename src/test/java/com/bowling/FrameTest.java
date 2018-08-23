@@ -135,7 +135,7 @@ public class FrameTest {
         Frame normal = new Frame(input);
         String errorMessage = String.format(
                 "Normal frame with no misses ('%s') first hit not parsed correctly", input);
-        assertEquals(errorMessage, hit1, normal.getFirstHit());
+        assertEquals(errorMessage, hit1, normal.getFirstHitPoints());
     }
 
     @Test
@@ -145,7 +145,7 @@ public class FrameTest {
         Frame normal = new Frame(input);
         String errorMessage = String.format(
                 "Normal frame with one miss ('%s') first hit not parsed correctly", input);
-        assertEquals(errorMessage, hit, normal.getFirstHit());
+        assertEquals(errorMessage, hit, normal.getFirstHitPoints());
     }
 
     @Test
@@ -155,7 +155,7 @@ public class FrameTest {
         Frame normal = new Frame(input);
         String errorMessage = String.format(
                 "Normal frame with strike ('%s') first hit not parsed correctly", input);
-        assertEquals(errorMessage, hit, normal.getFirstHit());
+        assertEquals(errorMessage, hit, normal.getFirstHitPoints());
     }
 
     @Test
@@ -166,7 +166,7 @@ public class FrameTest {
         Frame normal = new Frame(input);
         String errorMessage = String.format(
                 "Normal frame with no misses ('%s') second hit not parsed correctly", input);
-        assertEquals(errorMessage, hit2, normal.getSecondHit());
+        assertEquals(errorMessage, hit2, normal.getSecondHitPoints());
     }
 
     @Test
@@ -176,15 +176,15 @@ public class FrameTest {
         Frame normal = new Frame(input);
         String errorMessage = String.format(
                 "Normal frame with one miss ('%s') second hit not parsed correctly", input);
-        assertEquals(errorMessage, hit, normal.getSecondHit());
+        assertEquals(errorMessage, hit, normal.getSecondHitPoints());
     }
 
     @Test
     public void testGetNormalFrameHitsWithTwoMisses() {
         Frame normal = new Frame("--");
         assertEquals("Normal frame with two misses ('--') first hit not parsed correctly",
-                0, normal.getFirstHit());
+                0, normal.getFirstHitPoints());
         assertEquals("Normal frame with two misses ('--') second hit not parsed correctly",
-                0, normal.getSecondHit());
+                0, normal.getSecondHitPoints());
     }
 }
