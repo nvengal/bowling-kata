@@ -1,15 +1,27 @@
 package com.bowling;
 
 public class Frame {
-    public Frame(String frame) {
+    private final Type type;
 
+    public Frame(String frame) {
+        type = Type.getType(frame);
     }
 
     public Type getType() {
-        return null;
+        return type;
     }
 
     public enum Type {
-        Strike, Spare, Normal
+        STRIKE, SPARE, NORMAL;
+
+        private static Type getType(String frame) {
+            if ("x".equalsIgnoreCase(frame)) {
+                return STRIKE;
+            } else if (frame.endsWith("/")) {
+                return SPARE;
+            } else {
+                return NORMAL;
+            }
+        }
     }
 }
