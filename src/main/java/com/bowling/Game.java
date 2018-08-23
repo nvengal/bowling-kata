@@ -3,9 +3,24 @@ package com.bowling;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class Game {
+
+    public static void main(String[] args) {
+        System.out.println("----------BOWLING GAME SCORE CALCULATOR----------");
+        System.out.println("Enter a 10 frame game in the format '5- 8/ 4- -/ -6 X 43 X -/ 4/7'\n" +
+            "Spaces separate frames, '-' represents a miss, '/' a spare and 'X' a strike:");
+
+        String input;
+        try (Scanner reader = new Scanner(System.in)) {
+            input = reader.nextLine().trim();
+        }
+        int score = calculateScore(input);
+
+        System.out.println(String.format("You scored %d points", score));
+    }
 
     public static int calculateScore(String line) {
         int score = 0;
