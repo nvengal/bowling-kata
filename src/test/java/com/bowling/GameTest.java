@@ -18,7 +18,7 @@ public class GameTest {
 
     @Test
     public void calculateScoreForGameWithAllStrikes() {
-        String line = "X X X X X X X X X XXX";
+        String line = "X X X X X X X X X X X X";
         int score = Game.calculateScore(line);
         String errorMessage = String.format("Score for line: '%s' was incorrect", line);
         assertEquals(errorMessage, 300, score);
@@ -26,7 +26,7 @@ public class GameTest {
 
     @Test
     public void calculateScoreForGameWithAllStrikesAndSpareBonusHits() {
-        String line = "X X X X X X X X X X5/";
+        String line = "X X X X X X X X X X 5/";
         int score = Game.calculateScore(line);
         String errorMessage = String.format("Score for line: '%s' was incorrect", line);
         assertEquals(errorMessage, 285, score);

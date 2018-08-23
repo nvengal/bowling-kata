@@ -63,13 +63,21 @@ public class Frame {
         STRIKE, SPARE, NORMAL;
 
         private static Type getType(String frame) {
-            if ("x".equalsIgnoreCase(frame)) {
+            if (isStrike(frame)) {
                 return STRIKE;
-            } else if (frame.endsWith("/")) {
+            } else if (isSpare(frame)) {
                 return SPARE;
             } else {
                 return NORMAL;
             }
+        }
+
+        public static boolean isStrike(String frame) {
+            return "x".equalsIgnoreCase(frame);
+        }
+
+        public static boolean isSpare(String frame) {
+            return frame.endsWith("/");
         }
     }
 }
