@@ -1,4 +1,4 @@
-package com.audition;
+package com.bowling;
 
 public class Game {
 }
