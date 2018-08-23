@@ -126,4 +126,65 @@ public class FrameTest {
         assertEquals("Normal frame with two misses ('--') not calculated properly",
                 0, normal.getPoints());
     }
+
+    @Test
+    public void testGetFirstHitWithNoMiss() {
+        int hit1 = ThreadLocalRandom.current().nextInt(1, 10);
+        int hit2 = ThreadLocalRandom.current().nextInt(1, 10-hit1);
+        String input = String.format("%d%d", hit1, hit2);
+        Frame normal = new Frame(input);
+        String errorMessage = String.format(
+                "Normal frame with no misses ('%s') first hit not parsed correctly", input);
+        assertEquals(errorMessage, hit1, normal.getFirstHit());
+    }
+
+    @Test
+    public void testGetFirstHitWithOneMiss() {
+        int hit = ThreadLocalRandom.current().nextInt(1, 10);
+        String input = String.format("%d-", hit);
+        Frame normal = new Frame(input);
+        String errorMessage = String.format(
+                "Normal frame with one miss ('%s') first hit not parsed correctly", input);
+        assertEquals(errorMessage, hit, normal.getFirstHit());
+    }
+
+    @Test
+    public void testGetFirstHitWithStrike() {
+        int hit = ThreadLocalRandom.current().nextInt(1, 10);
+        String input = String.format("%d/", hit);
+        Frame normal = new Frame(input);
+        String errorMessage = String.format(
+                "Normal frame with strike ('%s') first hit not parsed correctly", input);
+        assertEquals(errorMessage, hit, normal.getFirstHit());
+    }
+
+    @Test
+    public void testGetSecondHitWithNoMiss() {
+        int hit1 = ThreadLocalRandom.current().nextInt(1, 10);
+        int hit2 = ThreadLocalRandom.current().nextInt(1, 10-hit1);
+        String input = String.format("%d%d", hit1, hit2);
+        Frame normal = new Frame(input);
+        String errorMessage = String.format(
+                "Normal frame with no misses ('%s') second hit not parsed correctly", input);
+        assertEquals(errorMessage, hit2, normal.getSecondHit());
+    }
+
+    @Test
+    public void testGetSecondHitWithOneMiss() {
+        int hit = ThreadLocalRandom.current().nextInt(1, 10);
+        String input = String.format("-%d", hit);
+        Frame normal = new Frame(input);
+        String errorMessage = String.format(
+                "Normal frame with one miss ('%s') second hit not parsed correctly", input);
+        assertEquals(errorMessage, hit, normal.getSecondHit());
+    }
+
+    @Test
+    public void testGetNormalFrameHitsWithTwoMisses() {
+        Frame normal = new Frame("--");
+        assertEquals("Normal frame with two misses ('--') first hit not parsed correctly",
+                0, normal.getFirstHit());
+        assertEquals("Normal frame with two misses ('--') second hit not parsed correctly",
+                0, normal.getSecondHit());
+    }
 }
